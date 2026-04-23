@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión - Pet Shop & Gas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div id="sucursal-selector">
+            Sucursal Actual: 
+            <select id="select-sucursal">
+                <option value="1">Sucursal Centro</option>
+                <option value="2">Sucursal Norte</option>
+                <option value="3">Sucursal Sur</option>
+            </select>
+        </div>
+        <h1>Mi Negocio</h1>
+        <div id="status-internet">Conectado</div>
+    </header>
+
+    <main>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="nuevaVenta()">+ Nueva Venta</button>
+            <div id="tab-list"></div>
+        </div>
+
+        <section id="zona-ventas">
+            <div class="buscador-box">
+                <input type="text" id="buscar-producto" placeholder="Buscar producto por nombre o código...">
+            </div>
+
+            <table id="tabla-venta">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cant (Kg/Un)</th>
+                        <th>Precio Unit.</th>
+                        <th>Subtotal</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="carrito-body"></tbody>
+            </table>
+
+            <div class="resumen-venta">
+                <div class="linea-resumen">Subtotal: <span id="subtotal">0.00</span></div>
+                <div class="linea-resumen">
+                    Descuento: <input type="number" id="descuento" value="0" oninput="recalcularTotal()">
+                </div>
+                <div class="linea-resumen">Total: <span id="total-final">0.00</span></div>
+                <button class="btn-pagar" onclick="abrirModalPagos()">Proceder al Pago</button>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-pagos" class="modal">
+        <div class="modal-content">
+            <h2>Finalizar Venta</h2>
+            <div id="metodos-pago-lista">
+                </div>
+            <button onclick="cerrarVenta()">Confirmar y Cerrar</button>
+            <button onclick="cerrarModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

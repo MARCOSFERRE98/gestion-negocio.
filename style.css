@@ -1,0 +1,16 @@
+body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
+header { background: #2c3e50; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+.tabs { background: #ecf0f1; padding: 0.5rem; display: flex; gap: 5px; border-bottom: 2px solid #bdc3c7; }
+.tab-btn { padding: 10px 20px; border: none; cursor: pointer; background: #bdc3c7; }
+.tab-btn.active { background: #3498db; color: white; }
+
+.buscador-box { padding: 20px; }
+#buscar-producto { width: 100%; padding: 12px; font-size: 1.2rem; border-radius: 8px; border: 1px solid #ddd; }
+
+table { width: 95%; margin: auto; border-collapse: collapse; background: white; }
+th, td { padding: 15px; border-bottom: 1px solid #ddd; text-align: left; }
+.resumen-venta { width: 95%; margin: 20px auto; text-align: right; background: white; padding: 20px; border-radius: 8px; }
+
+.btn-pagar { background: #27ae60; color: white; padding: 15px 30px; border: none; font-size: 1.2rem; cursor: pointer; border-radius: 5px; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+.modal-content { background: white; width: 400px; margin: 100px auto; padding: 20px; border-radius: 10px; }

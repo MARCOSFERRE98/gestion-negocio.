@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión - Mi Negocio</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #f4f7f6; padding: 20px;">
+
+    <div style="background: #2c3e50; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h1>Mi Negocio - Mostrador</h1>
+        <p>Sucursal Actual: Centro</p>
+    </div>
+
+    <div style="background: white; padding: 20px; border-radius: 8px;">
+        <h2>Borrador de Venta</h2>
+        <table style="width: 100%; text-align: left; border-collapse: collapse;">
+            <tr style="border-bottom: 2px solid #ddd;">
+                <th>Producto</th>
+                <th>Cant.</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+            <tr>
+                <td>Alimento Perro Premium</td>
+                <td>1.5 kg</td>
+                <td>$2000</td>
+                <td>$3000</td>
+            </tr>
+        </table>
+
+        <div style="text-align: right; margin-top: 20px; font-size: 1.2rem;">
+            <p>Subtotal: $3000</p>
+            <p>Descuento: $<input type="number" value="0" style="width: 80px; font-size: 1.1rem;"></p>
+            <h3 style="color: #27ae60;">Total a Cobrar: $3000</h3>
+            <button style="background: #3498db; color: white; padding: 10px 20px; border: none; font-size: 1.2rem; cursor: pointer; border-radius: 5px;">Cobrar</button>
+        </div>
+    </div>
+
+</body>
+</html>

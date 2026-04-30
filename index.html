@@ -25,6 +25,7 @@
         .btn-pay { background: var(--success); color: white; border: none; padding: 15px; width: 100%; font-size: 1.3rem; border-radius: 10px; cursor: pointer; margin-top: 10px; font-weight: bold; }
         .btn-pay:hover { background: #219150; }
         .btn-del { color: #e74c3c; cursor: pointer; font-size: 1.2rem; border: none; background: none; }
+        .discount-group { display: flex; gap: 5px; width: 180px; }
     </style>
 </head>
 <body>
@@ -56,14 +57,20 @@
     <div class="summary">
         <div class="total-row">
             <span>Método de Pago:</span>
-            <select id="metodo-pago" style="width: 200px;" onchange="calcularTodo()">
+            <select id="metodo-pago" style="width: 220px;" onchange="calcularTodo()">
                 <option value="efectivo">Efectivo / Transferencia</option>
                 <option value="tarjeta">Tarjeta (+15% Recargo)</option>
             </select>
         </div>
         <div class="total-row">
-            <span>Descuento ($):</span>
-            <input type="number" id="descuento" style="width: 100px;" value="0" oninput="calcularTodo()">
+            <span>Descuento:</span>
+            <div class="discount-group">
+                <input type="number" id="valor-descuento" value="0" oninput="calcularTodo()">
+                <select id="tipo-descuento" style="width: 70px;" onchange="calcularTodo()">
+                    <option value="fijo">$</option>
+                    <option value="porcentaje">%</option>
+                </select>
+            </div>
         </div>
         <hr>
         <div class="total-row">
@@ -74,6 +81,10 @@
             <span>Recargo Tarjeta (15%):</span>
             <span id="recargo-txt">$0.00</span>
         </div>
+        <div id="row-descuento-aplicado" class="total-row" style="display:none; color: #e74c3c;">
+            <span>Descuento Aplicado:</span>
+            <span id="descuento-txt">-$0.00</span>
+        </div>
         <div class="total-row">
             <span style="font-size: 1.2rem; font-weight: bold;">TOTAL FINAL:</span>
             <span id="total-final" class="grand-total">$0.00</span>
@@ -83,7 +94,6 @@
 </div>
 
 <script>
-    // Tu lista de productos inicial
     const productos = [
         { id: 1, nombre: "Alimento Perro Adulto", precio: 2500 },
         { id: 2, nombre: "Alimento Gato Mix", precio: 2200 },
@@ -124,7 +134,6 @@
         actualizarTabla();
     }
 
-    // EL SECRETO: Estas funciones solo tocan los números, no redibujan la tabla
     function actPorCant(uuid, valor) {
         const i = carrito.find(x => x.uuid === uuid);
         i.cant = parseFloat(valor) || 0;
@@ -162,7 +171,25 @@
         let st = 0;
         carrito.forEach(i => st += parseFloat(i.sub) || 0);
         
-        const desc = parseFloat(document.getElementById('descuento').value) || 0;
+        // Lógica de Descuento Dual
+        const valorDesc = parseFloat(document.getElementById('valor-descuento').value) || 0;
+        const tipoDesc = document.getElementById('tipo-descuento').value;
+        let montoDescuento = 0;
+
+        if (tipoDesc === "fijo") {
+            montoDescuento = valorDesc;
+        } else {
+            montoDescuento = st * (valorDesc / 100);
+        }
+
+        // Mostrar/Ocultar fila de descuento en el resumen
+        if (montoDescuento > 0) {
+            document.getElementById('row-descuento-aplicado').style.display = "flex";
+            document.getElementById('descuento-txt').innerText = `-$${montoDescuento.toFixed(2)}`;
+        } else {
+            document.getElementById('row-descuento-aplicado').style.display = "none";
+        }
+
         const metodo = document.getElementById('metodo-pago').value;
         let rec = 0;
 
@@ -174,7 +201,7 @@
             document.getElementById('row-recargo').style.display = "none";
         }
 
-        const total = st + rec - desc;
+        const total = st + rec - montoDescuento;
         document.getElementById('subtotal-txt').innerText = `$${st.toFixed(2)}`;
         document.getElementById('total-final').innerText = `$${total.toFixed(2)}`;
     }
@@ -183,7 +210,7 @@
         if(carrito.length === 0) return;
         alert("Venta Guardada con Éxito");
         carrito = [];
-        document.getElementById('descuento').value = 0;
+        document.getElementById('valor-descuento').value = 0;
         actualizarTabla();
     }
 </script>

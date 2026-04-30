@@ -3,41 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión Pro - Marcos</title>
+    <title>Sistema de Gestión Integral - Pet Shop & Gas</title>
     <style>
-        :root { --primary: #2c3e50; --secondary: #3498db; --success: #27ae60; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        .header { background: var(--primary); color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .search-container { position: relative; }
-        input, select { padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem; width: 100%; box-sizing: border-box; }
-        .search-box { border: 2px solid var(--secondary); outline: none; }
+        :root { --primary: #2c3e50; --secondary: #3498db; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: #333; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        
+        /* Cabecera */
+        .header { background: var(--primary); color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .btn-admin { background: var(--secondary); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        
+        /* Buscador */
+        .search-container { position: relative; margin-bottom: 20px; }
+        input, select { padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem; width: 100%; box-sizing: border-box; outline: none; }
+        .search-box { border: 2px solid var(--secondary); }
         .results-list { background: white; border: 1px solid #ddd; position: absolute; width: 100%; z-index: 100; border-radius: 8px; max-height: 250px; overflow-y: auto; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .result-item { padding: 12px; cursor: pointer; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
-        .result-item:hover { background: #f0f7ff; color: var(--secondary); }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .result-item:hover { background: #f0f7ff; }
+
+        /* Tablas */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th { background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #eee; }
         td { padding: 10px; border-bottom: 1px solid #eee; }
-        .input-qty, .input-price { width: 90px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; text-align: center; }
+        .input-qty, .input-price { width: 85px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; text-align: center; }
+
+        /* Resumen de Pago */
         .summary { background: #f9f9f9; padding: 20px; border-radius: 10px; margin-top: 20px; border: 1px solid #eee; }
         .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .grand-total { font-size: 2.2rem; color: var(--success); font-weight: bold; }
+        .grand-total { font-size: 2.5rem; color: var(--success); font-weight: bold; }
         .btn-pay { background: var(--success); color: white; border: none; padding: 15px; width: 100%; font-size: 1.3rem; border-radius: 10px; cursor: pointer; margin-top: 10px; font-weight: bold; }
-        .btn-pay:hover { background: #219150; }
-        .btn-del { color: #e74c3c; cursor: pointer; font-size: 1.2rem; border: none; background: none; }
-        .discount-group { display: flex; gap: 5px; width: 180px; }
+
+        /* Paneles Ocultos (Admin e Historial) */
+        .modal { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); overflow-y: auto; }
+        .modal-content { background: white; margin: 5% auto; padding: 25px; width: 90%; max-width: 600px; border-radius: 15px; position: relative; }
+        .close { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; }
+        .form-group { margin-bottom: 15px; }
+        .btn-save { background: var(--success); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+
+        /* Estilos para impresión */
+        @media print {
+            body * { visibility: hidden; }
+            #ticket-imprimir, #ticket-imprimir * { visibility: visible; }
+            #ticket-imprimir { position: absolute; left: 0; top: 0; width: 80mm; font-family: monospace; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h2 style="margin:0;">Gestión de Ventas</h2>
-        <div id="status" style="font-size: 0.8rem;">● Sincronizado</div>
+        <div>
+            <h2 style="margin:0;">Venta de Mostrador</h2>
+            <select id="sucursal-activa" style="background: none; border: none; color: white; width: auto; padding: 0; font-size: 0.9rem;">
+                <option style="color: black;">Sucursal Principal</option>
+                <option style="color: black;">Sucursal Norte</option>
+            </select>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-admin" style="background: var(--warning);" onclick="abrirModal('modal-historial')">📊 Ventas del Día</button>
+            <button class="btn-admin" onclick="abrirModal('modal-admin')">⚙️ Inventario</button>
+        </div>
     </div>
 
     <div class="search-container">
-        <input type="text" id="buscador" class="search-box" placeholder="🔍 Escribe para buscar (Perro, Gato, Gas...)" oninput="buscar()" autocomplete="off">
+        <input type="text" id="buscador" class="search-box" placeholder="🔍 Buscar producto..." oninput="buscar()" autocomplete="off">
         <div id="lista-resultados" class="results-list"></div>
     </div>
 
@@ -45,9 +74,9 @@
         <thead>
             <tr>
                 <th>Producto</th>
-                <th>Kg / Unid.</th>
-                <th>Precio Unit.</th>
-                <th>Subtotal ($)</th>
+                <th>Kg/Unid.</th>
+                <th>Precio U.</th>
+                <th>Subtotal</th>
                 <th></th>
             </tr>
         </thead>
@@ -57,14 +86,14 @@
     <div class="summary">
         <div class="total-row">
             <span>Método de Pago:</span>
-            <select id="metodo-pago" style="width: 220px;" onchange="calcularTodo()">
+            <select id="metodo-pago" style="width: 200px;" onchange="calcularTodo()">
                 <option value="efectivo">Efectivo / Transferencia</option>
                 <option value="tarjeta">Tarjeta (+15% Recargo)</option>
             </select>
         </div>
         <div class="total-row">
             <span>Descuento:</span>
-            <div class="discount-group">
+            <div style="display: flex; gap: 5px; width: 180px;">
                 <input type="number" id="valor-descuento" value="0" oninput="calcularTodo()">
                 <select id="tipo-descuento" style="width: 70px;" onchange="calcularTodo()">
                     <option value="fijo">$</option>
@@ -73,43 +102,98 @@
             </div>
         </div>
         <hr>
-        <div class="total-row">
-            <span>Subtotal Productos:</span>
-            <span id="subtotal-txt">$0.00</span>
-        </div>
-        <div id="row-recargo" class="total-row" style="display:none; color: #a97900;">
-            <span>Recargo Tarjeta (15%):</span>
-            <span id="recargo-txt">$0.00</span>
-        </div>
-        <div id="row-descuento-aplicado" class="total-row" style="display:none; color: #e74c3c;">
-            <span>Descuento Aplicado:</span>
-            <span id="descuento-txt">-$0.00</span>
-        </div>
-        <div class="total-row">
-            <span style="font-size: 1.2rem; font-weight: bold;">TOTAL FINAL:</span>
-            <span id="total-final" class="grand-total">$0.00</span>
-        </div>
-        <button class="btn-pay" onclick="finalizar()">REGISTRAR VENTA</button>
+        <div class="total-row"><span>Subtotal Productos:</span> <span id="sub-txt">$0.00</span></div>
+        <div id="row-recargo" class="total-row" style="display:none; color: var(--warning);"><span>Recargo Tarjeta (15%):</span> <span id="rec-txt">$0.00</span></div>
+        <div id="row-desc" class="total-row" style="display:none; color: var(--danger);"><span>Descuento Aplicado:</span> <span id="desc-txt">-$0.00</span></div>
+        <div class="total-row"><span style="font-size: 1.2rem; font-weight: bold;">TOTAL:</span> <span id="total-final" class="grand-total">$0.00</span></div>
+        <button class="btn-pay" onclick="finalizarVenta()">REGISTRAR Y EMITIR TICKET</button>
     </div>
 </div>
 
-<script>
-    const productos = [
-        { id: 1, nombre: "Alimento Perro Adulto", precio: 2500 },
-        { id: 2, nombre: "Alimento Gato Mix", precio: 2200 },
-        { id: 3, nombre: "Garrafa 10kg", precio: 6500 },
-        { id: 4, nombre: "Garrafa 15kg", precio: 9800 },
-        { id: 5, nombre: "Piedras Sanitarias", precio: 1500 }
-    ];
+<div id="modal-admin" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModal('modal-admin')">&times;</span>
+        <h3>📦 Gestión de Productos</h3>
+        <div class="form-group">
+            <input type="text" id="nuevo-nombre" placeholder="Nombre del Producto (Ej: Alimento Perro)">
+            <input type="number" id="nuevo-precio" placeholder="Precio por Unidad/Kg" style="margin-top:10px">
+            <button class="btn-save" style="margin-top:10px; width:100%" onclick="guardarProducto()">+ Agregar al Sistema</button>
+        </div>
+        <hr>
+        <h4>Lista Actual:</h4>
+        <div id="lista-inventario" style="max-height: 300px; overflow-y: auto;"></div>
+    </div>
+</div>
 
+<div id="modal-historial" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <span class="close" onclick="cerrarModal('modal-historial')">&times;</span>
+        <h3>📊 Ventas Registradas Hoy</h3>
+        <table style="font-size: 0.9rem;">
+            <thead>
+                <tr>
+                    <th>Hora</th>
+                    <th>Productos</th>
+                    <th>Pago</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="historial-body"></tbody>
+        </table>
+        <div style="margin-top:20px; font-weight:bold; text-align:right; font-size:1.2rem;">
+            CAJA TOTAL: <span id="caja-total" style="color: var(--success);">$0.00</span>
+        </div>
+    </div>
+</div>
+
+<div id="ticket-imprimir" style="display:none;"></div>
+
+<script>
+    // CARGA INICIAL: Usamos LocalStorage para que los datos no se borren al cerrar
+    let productos = JSON.parse(localStorage.getItem('productos')) || [
+        { id: 1, nombre: "Alimento de ejemplo", precio: 1000 }
+    ];
+    let ventas = JSON.parse(localStorage.getItem('ventas')) || [];
     let carrito = [];
 
+    // --- FUNCIONES DE INVENTARIO ---
+    function guardarProducto() {
+        const nom = document.getElementById('nuevo-nombre').value;
+        const pre = parseFloat(document.getElementById('nuevo-precio').value);
+        if(!nom || !pre) return alert("Completa nombre y precio");
+        
+        productos.push({ id: Date.now(), nombre: nom, precio: pre });
+        localStorage.setItem('productos', JSON.stringify(productos));
+        document.getElementById('nuevo-nombre').value = "";
+        document.getElementById('nuevo-precio').value = "";
+        actualizarListaAdmin();
+        alert("Producto guardado");
+    }
+
+    function eliminarProducto(id) {
+        if(confirm("¿Seguro quieres eliminar este producto?")) {
+            productos = productos.filter(p => p.id !== id);
+            localStorage.setItem('productos', JSON.stringify(productos));
+            actualizarListaAdmin();
+        }
+    }
+
+    function actualizarListaAdmin() {
+        const div = document.getElementById('lista-inventario');
+        div.innerHTML = productos.map(p => `
+            <div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #eee">
+                <span>${p.nombre} (<b>$${p.precio}</b>)</span>
+                <button onclick="eliminarProducto(${p.id})" style="color:red; border:none; background:none; cursor:pointer;">Eliminar</button>
+            </div>
+        `).join('');
+    }
+
+    // --- FUNCIONES DE VENTA ---
     function buscar() {
         const t = document.getElementById('buscador').value.toLowerCase();
         const lista = document.getElementById('lista-resultados');
         lista.innerHTML = "";
         if(t.length < 1) { lista.style.display = "none"; return; }
-
         const sugerencias = productos.filter(p => p.nombre.toLowerCase().includes(t));
         if(sugerencias.length > 0) {
             lista.style.display = "block";
@@ -120,50 +204,44 @@
                 d.onclick = () => { agregar(p); lista.style.display = "none"; document.getElementById('buscador').value = ""; };
                 lista.appendChild(d);
             });
-        } else { lista.style.display = "none"; }
+        }
     }
 
     function agregar(p) {
-        const item = { ...p, uuid: Date.now(), cant: 1, sub: p.precio };
-        carrito.push(item);
-        actualizarTabla();
+        carrito.push({ ...p, uuid: Date.now(), cant: 1, sub: p.precio });
+        actualizarTablaVenta();
     }
 
-    function eliminar(uuid) {
+    function actFila(uuid, tipo, valor) {
+        const i = carrito.find(x => x.uuid === uuid);
+        if(tipo === 'cant') {
+            i.cant = parseFloat(valor) || 0;
+            i.sub = (i.cant * i.precio).toFixed(2);
+            document.getElementById(`sub-${uuid}`).value = i.sub;
+        } else {
+            i.sub = parseFloat(valor) || 0;
+            i.cant = (i.sub / i.precio).toFixed(3);
+            document.getElementById(`cant-${uuid}`).value = i.cant;
+        }
+        calcularTodo();
+    }
+
+    function eliminarDelCarrito(uuid) {
         carrito = carrito.filter(i => i.uuid !== uuid);
-        actualizarTabla();
+        actualizarTablaVenta();
     }
 
-    function actPorCant(uuid, valor) {
-        const i = carrito.find(x => x.uuid === uuid);
-        i.cant = parseFloat(valor) || 0;
-        i.sub = (i.cant * i.precio).toFixed(2);
-        document.getElementById(`sub-${uuid}`).value = i.sub;
-        calcularTodo();
-    }
-
-    function actPorPrecio(uuid, valor) {
-        const i = carrito.find(x => x.uuid === uuid);
-        i.sub = parseFloat(valor) || 0;
-        i.cant = (i.sub / i.precio).toFixed(3);
-        document.getElementById(`cant-${uuid}`).value = i.cant;
-        calcularTodo();
-    }
-
-    function actualizarTabla() {
+    function actualizarTablaVenta() {
         const body = document.getElementById('carrito-body');
-        body.innerHTML = "";
-        carrito.forEach(i => {
-            body.innerHTML += `
-                <tr>
-                    <td>${i.nombre}</td>
-                    <td><input type="number" id="cant-${i.uuid}" step="0.01" class="input-qty" value="${i.cant}" oninput="actPorCant(${i.uuid}, this.value)"></td>
-                    <td>$${i.precio}</td>
-                    <td><input type="number" id="sub-${i.uuid}" class="input-price" value="${i.sub}" oninput="actPorPrecio(${i.uuid}, this.value)"></td>
-                    <td><button class="btn-del" onclick="eliminar(${i.uuid})">✖</button></td>
-                </tr>
-            `;
-        });
+        body.innerHTML = carrito.map(i => `
+            <tr>
+                <td>${i.nombre}</td>
+                <td><input type="number" id="cant-${i.uuid}" step="0.01" class="input-qty" value="${i.cant}" oninput="actFila(${i.uuid}, 'cant', this.value)"></td>
+                <td>$${i.precio}</td>
+                <td><input type="number" id="sub-${i.uuid}" class="input-price" value="${i.sub}" oninput="actFila(${i.uuid}, 'precio', this.value)"></td>
+                <td><button onclick="eliminarDelCarrito(${i.uuid})" style="border:none; background:none; color:red; cursor:pointer;">✖</button></td>
+            </tr>
+        `).join('');
         calcularTodo();
     }
 
@@ -171,47 +249,87 @@
         let st = 0;
         carrito.forEach(i => st += parseFloat(i.sub) || 0);
         
-        // Lógica de Descuento Dual
         const valorDesc = parseFloat(document.getElementById('valor-descuento').value) || 0;
         const tipoDesc = document.getElementById('tipo-descuento').value;
-        let montoDescuento = 0;
-
-        if (tipoDesc === "fijo") {
-            montoDescuento = valorDesc;
-        } else {
-            montoDescuento = st * (valorDesc / 100);
-        }
-
-        // Mostrar/Ocultar fila de descuento en el resumen
-        if (montoDescuento > 0) {
-            document.getElementById('row-descuento-aplicado').style.display = "flex";
-            document.getElementById('descuento-txt').innerText = `-$${montoDescuento.toFixed(2)}`;
-        } else {
-            document.getElementById('row-descuento-aplicado').style.display = "none";
-        }
+        const montoDesc = (tipoDesc === "fijo") ? valorDesc : st * (valorDesc / 100);
 
         const metodo = document.getElementById('metodo-pago').value;
-        let rec = 0;
+        const rec = (metodo === "tarjeta") ? st * 0.15 : 0;
 
-        if(metodo === "tarjeta") {
-            rec = st * 0.15;
-            document.getElementById('row-recargo').style.display = "flex";
-            document.getElementById('recargo-txt').innerText = `+$${rec.toFixed(2)}`;
-        } else {
-            document.getElementById('row-recargo').style.display = "none";
-        }
-
-        const total = st + rec - montoDescuento;
-        document.getElementById('subtotal-txt').innerText = `$${st.toFixed(2)}`;
+        document.getElementById('row-recargo').style.display = rec > 0 ? "flex" : "none";
+        document.getElementById('row-desc').style.display = montoDesc > 0 ? "flex" : "none";
+        document.getElementById('rec-txt').innerText = `+$${rec.toFixed(2)}`;
+        document.getElementById('desc-txt').innerText = `-$${montoDesc.toFixed(2)}`;
+        document.getElementById('sub-txt').innerText = `$${st.toFixed(2)}`;
+        
+        const total = st + rec - montoDesc;
         document.getElementById('total-final').innerText = `$${total.toFixed(2)}`;
+        return total;
     }
 
-    function finalizar() {
+    // --- FINALIZAR E IMPRIMIR ---
+    function finalizarVenta() {
         if(carrito.length === 0) return;
-        alert("Venta Guardada con Éxito");
+        const total = calcularTodo();
+        const sucursal = document.getElementById('sucursal-activa').value;
+        const metodo = document.getElementById('metodo-pago').value;
+        
+        const venta = {
+            fecha: new Date().toLocaleTimeString(),
+            items: carrito.map(i => `${i.nombre} (${i.cant} x $${i.precio})`),
+            metodo: metodo,
+            total: total
+        };
+
+        ventas.push(venta);
+        localStorage.setItem('ventas', JSON.stringify(ventas));
+
+        generarTicket(venta);
+        window.print();
+
         carrito = [];
         document.getElementById('valor-descuento').value = 0;
-        actualizarTabla();
+        actualizarTablaVenta();
+    }
+
+    function generarTicket(v) {
+        const t = document.getElementById('ticket-imprimir');
+        t.innerHTML = `
+            <div style="text-align:center">
+                <h3>PET SHOP & GAS</h3>
+                <p>${new Date().toLocaleDateString()} ${v.fecha}</p>
+                <hr>
+                <table style="width:100%; font-size:12px">
+                    ${carrito.map(i => `<tr><td>${i.nombre}</td><td align="right">$${i.sub}</td></tr>`).join('')}
+                </table>
+                <hr>
+                <p>MÉTODO: ${v.metodo.toUpperCase()}</p>
+                <h2 style="margin:0">TOTAL: $${v.total.toFixed(2)}</h2>
+                <p>¡Gracias por su compra!</p>
+            </div>
+        `;
+    }
+
+    // --- MODALES Y REPORTES ---
+    function abrirModal(id) {
+        document.getElementById(id).style.display = "block";
+        if(id === 'modal-admin') actualizarListaAdmin();
+        if(id === 'modal-historial') actualizarHistorial();
+    }
+    function cerrarModal(id) { document.getElementById(id).style.display = "none"; }
+
+    function actualizarHistorial() {
+        const body = document.getElementById('historial-body');
+        let caja = 0;
+        body.innerHTML = ventas.map(v => {
+            caja += v.total;
+            return `<tr><td>${v.fecha}</td><td>${v.items.join('<br>')}</td><td>${v.metodo}</td><td>$${v.total.toFixed(2)}</td></tr>`;
+        }).reverse().join('');
+        document.getElementById('caja-total').innerText = `$${caja.toFixed(2)}`;
+    }
+
+    window.onclick = function(event) {
+        if (event.target.className === 'modal') { event.target.style.display = "none"; }
     }
 </script>
 

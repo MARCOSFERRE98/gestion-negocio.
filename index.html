@@ -3,127 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión - Pet Shop & Gas</title>
+    <title>Sistema de Gestión Pro - Marcos</title>
     <style>
-        :root { --primary: #2c3e50; --secondary: #3498db; --success: #27ae60; --danger: #e74c3c; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 15px; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .header { background: var(--primary); color: white; padding: 20px; border-radius: 15px 15px 0 0; margin: -20px -20px 20px -20px; display: flex; justify-content: space-between; align-items: center; }
-        .search-container { position: relative; margin-bottom: 25px; }
+        :root { --primary: #2c3e50; --secondary: #3498db; --success: #27ae60; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 10px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .header { background: var(--primary); color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .search-container { position: relative; }
         input, select { padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem; width: 100%; box-sizing: border-box; }
-        .search-box { border: 2px solid var(--secondary); font-size: 1.1rem; }
-        .results-list { background: white; border: 1px solid #ddd; position: absolute; width: 100%; z-index: 100; border-radius: 0 0 8px 8px; max-height: 200px; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .search-box { border: 2px solid var(--secondary); outline: none; }
+        .results-list { background: white; border: 1px solid #ddd; position: absolute; width: 100%; z-index: 100; border-radius: 8px; max-height: 250px; overflow-y: auto; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .result-item { padding: 12px; cursor: pointer; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
-        .result-item:hover { background: #f8f9fa; color: var(--secondary); }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .result-item:hover { background: #f0f7ff; color: var(--secondary); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th { background: #f8f9fa; padding: 12px; text-align: left; border-bottom: 2px solid #eee; }
-        td { padding: 12px; border-bottom: 1px solid #eee; }
-        .input-table { width: 80px !important; padding: 5px; text-align: center; }
-        .summary-card { background: #fdfdfd; border: 1px solid #eee; padding: 20px; border-radius: 10px; margin-top: 20px; }
-        .row-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .total-final { color: var(--success); font-size: 2.2rem; font-weight: bold; }
-        .btn-finish { background: var(--success); color: white; border: none; padding: 18px; width: 100%; font-size: 1.3rem; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-top: 15px; }
-        .btn-finish:hover { background: #219150; transform: translateY(-2px); }
-        .badge-card { background: #fff3cd; color: #856404; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; font-weight: bold; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+        .input-qty, .input-price { width: 90px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; text-align: center; }
+        .summary { background: #f9f9f9; padding: 20px; border-radius: 10px; margin-top: 20px; border: 1px solid #eee; }
+        .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .grand-total { font-size: 2.2rem; color: var(--success); font-weight: bold; }
+        .btn-pay { background: var(--success); color: white; border: none; padding: 15px; width: 100%; font-size: 1.3rem; border-radius: 10px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        .btn-pay:hover { background: #219150; }
+        .btn-del { color: #e74c3c; cursor: pointer; font-size: 1.2rem; border: none; background: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <div>
-            <h2 style="margin:0;">Sistema de Gestión</h2>
-            <small>Pet Shop & Servicios de Gas</small>
-        </div>
-        <div id="status">● En Línea</div>
+        <h2 style="margin:0;">Gestión de Ventas</h2>
+        <div id="status" style="font-size: 0.8rem;">● Sincronizado</div>
     </div>
 
     <div class="search-container">
-        <input type="text" id="buscador" class="search-box" placeholder="🔍 Buscar producto por nombre..." oninput="buscar()">
-        <div id="lista-resultados" class="results-list" style="display:none;"></div>
+        <input type="text" id="buscador" class="search-box" placeholder="🔍 Escribe para buscar (Perro, Gato, Gas...)" oninput="buscar()" autocomplete="off">
+        <div id="lista-resultados" class="results-list"></div>
     </div>
 
     <table>
         <thead>
             <tr>
                 <th>Producto</th>
-                <th>Kilos/Unid.</th>
+                <th>Kg / Unid.</th>
                 <th>Precio Unit.</th>
-                <th>Total ($)</th>
+                <th>Subtotal ($)</th>
                 <th></th>
             </tr>
         </thead>
-        <tbody id="carrito-body">
-            </tbody>
+        <tbody id="carrito-body"></tbody>
     </table>
 
-    <div class="summary-card">
-        <div class="row-flex">
+    <div class="summary">
+        <div class="total-row">
             <span>Método de Pago:</span>
-            <select id="metodo-pago" style="width: 200px;" onchange="recalcular()">
+            <select id="metodo-pago" style="width: 200px;" onchange="calcularTodo()">
                 <option value="efectivo">Efectivo / Transferencia</option>
                 <option value="tarjeta">Tarjeta (+15% Recargo)</option>
             </select>
         </div>
-        <div class="row-flex">
-            <span>Descuento Directo ($):</span>
-            <input type="number" id="descuento" class="input-table" value="0" oninput="recalcular()">
+        <div class="total-row">
+            <span>Descuento ($):</span>
+            <input type="number" id="descuento" style="width: 100px;" value="0" oninput="calcularTodo()">
         </div>
         <hr>
-        <div class="row-flex">
-            <span>Subtotal:</span>
-            <span id="txt-subtotal">$0.00</span>
+        <div class="total-row">
+            <span>Subtotal Productos:</span>
+            <span id="subtotal-txt">$0.00</span>
         </div>
-        <div id="info-recargo" class="row-flex" style="display:none; color: #856404;">
+        <div id="row-recargo" class="total-row" style="display:none; color: #a97900;">
             <span>Recargo Tarjeta (15%):</span>
-            <span id="txt-recargo">$0.00</span>
+            <span id="recargo-txt">$0.00</span>
         </div>
-        <div class="row-flex">
-            <span style="font-size: 1.2rem; font-weight: bold;">TOTAL A COBRAR:</span>
-            <span id="total-final" class="total-final">$0.00</span>
+        <div class="total-row">
+            <span style="font-size: 1.2rem; font-weight: bold;">TOTAL FINAL:</span>
+            <span id="total-final" class="grand-total">$0.00</span>
         </div>
-        <button class="btn-finish" onclick="finalizarVenta()">FINALIZAR VENTA</button>
+        <button class="btn-pay" onclick="finalizar()">REGISTRAR VENTA</button>
     </div>
 </div>
 
 <script>
-    // Base de datos de productos
+    // Tu lista de productos inicial
     const productos = [
-        { id: 1, nombre: "Alimento Perro Adulto (Bolsa)", precio: 2500 },
-        { id: 2, nombre: "Alimento Perro Cachorro", precio: 2800 },
-        { id: 3, nombre: "Alimento Gato Mix", precio: 2200 },
-        { id: 4, nombre: "Garrafa Gas 10kg", precio: 6500 },
-        { id: 5, nombre: "Garrafa Gas 15kg", precio: 9800 },
-        { id: 6, nombre: "Piedras Sanitarias 4kg", precio: 1500 },
-        { id: 7, nombre: "Pipeta Perro Mediano", precio: 3500 }
+        { id: 1, nombre: "Alimento Perro Adulto", precio: 2500 },
+        { id: 2, nombre: "Alimento Gato Mix", precio: 2200 },
+        { id: 3, nombre: "Garrafa 10kg", precio: 6500 },
+        { id: 4, nombre: "Garrafa 15kg", precio: 9800 },
+        { id: 5, nombre: "Piedras Sanitarias", precio: 1500 }
     ];
 
     let carrito = [];
 
     function buscar() {
-        const term = document.getElementById('buscador').value.toLowerCase();
+        const t = document.getElementById('buscador').value.toLowerCase();
         const lista = document.getElementById('lista-resultados');
         lista.innerHTML = "";
-        
-        if(term.length < 2) { lista.style.display = "none"; return; }
+        if(t.length < 1) { lista.style.display = "none"; return; }
 
-        const filtered = productos.filter(p => p.nombre.toLowerCase().includes(term));
-        if(filtered.length > 0) {
+        const sugerencias = productos.filter(p => p.nombre.toLowerCase().includes(t));
+        if(sugerencias.length > 0) {
             lista.style.display = "block";
-            filtered.forEach(p => {
-                const item = document.createElement('div');
-                item.className = "result-item";
-                item.innerHTML = `<span>${p.nombre}</span> <b>$${p.precio}</b>`;
-                item.onclick = () => { agregar(p); lista.style.display = "none"; document.getElementById('buscador').value = ""; };
-                lista.appendChild(item);
+            sugerencias.forEach(p => {
+                const d = document.createElement('div');
+                d.className = "result-item";
+                d.innerHTML = `<span>${p.nombre}</span> <b>$${p.precio}</b>`;
+                d.onclick = () => { agregar(p); lista.style.display = "none"; document.getElementById('buscador').value = ""; };
+                lista.appendChild(d);
             });
-        }
+        } else { lista.style.display = "none"; }
     }
 
     function agregar(p) {
-        const nuevo = { ...p, cantidad: 1, totalFila: p.precio };
-        carrito.push(nuevo);
-        render();
+        const item = { ...p, uuid: Date.now(), cant: 1, sub: p.precio };
+        carrito.push(item);
+        actualizarTabla();
     }
 
-    // LÓGICA INVERSA:
+    function eliminar(uuid) {
+        carrito = carrito.filter(i => i.uuid !== uuid);
+        actualizarTabla();
+    }
+
+    // EL SECRETO: Estas funciones solo tocan los números, no redibujan la tabla
+    function actPorCant(uuid, valor) {
+        const i = carrito.find(x => x.uuid === uuid);
+        i.cant = parseFloat(valor) || 0;
+        i.sub = (i.cant * i.precio).toFixed(2);
+        document.getElementById(`sub-${uuid}`).value = i.sub;
+        calcularTodo();
+    }
+
+    function actPorPrecio(uuid, valor) {
+        const i = carrito.find(x => x.uuid === uuid);
+        i.sub = parseFloat(valor) || 0;
+        i.cant = (i.sub / i.precio).toFixed(3);
+        document.getElementById(`cant-${uuid}`).value = i.cant;
+        calcularTodo();
+    }
+
+    function actualizarTabla() {
+        const body = document.getElementById('carrito-body');
+        body.innerHTML = "";
+        carrito.forEach(i => {
+            body.innerHTML += `
+                <tr>
+                    <td>${i.nombre}</td>
+                    <td><input type="number" id="cant-${i.uuid}" step="0.01" class="input-qty" value="${i.cant}" oninput="actPorCant(${i.uuid}, this.value)"></td>
+                    <td>$${i.precio}</td>
+                    <td><input type="number" id="sub-${i.uuid}" class="input-price" value="${i.sub}" oninput="actPorPrecio(${i.uuid}, this.value)"></td>
+                    <td><button class="btn-del" onclick="eliminar(${i.uuid})">✖</button></td>
+                </tr>
+            `;
+        });
+        calcularTodo();
+    }
+
+    function calcularTodo() {
+        let st = 0;
+        carrito.forEach(i => st += parseFloat(i.sub) || 0);
+        
+        const desc = parseFloat(document.getElementById('descuento').value) || 0;
+        const metodo = document.getElementById('metodo-pago').value;
+        let rec = 0;
+
+        if(metodo === "tarjeta") {
+            rec = st * 0.15;
+            document.getElementById('row-recargo').style.display = "flex";
+            document.getElementById('recargo-txt').innerText = `+$${rec.toFixed(2)}`;
+        } else {
+            document.getElementById('row-recargo').style.display = "none";
+        }
+
+        const total = st + rec - desc;
+        document.getElementById('subtotal-txt').innerText = `$${st.toFixed(2)}`;
+        document.getElementById('total-final').innerText = `$${total.toFixed(2)}`;
+    }
+
+    function finalizar() {
+        if(carrito.length === 0) return;
+        alert("Venta Guardada con Éxito");
+        carrito = [];
+        document.getElementById('descuento').value = 0;
+        actualizarTabla();
+    }
+</script>
+
+</body>
+</html>
